@@ -15,7 +15,7 @@ int main(){
         printf("Better try again!\n");
         break;
     default:
-        printf("Invail grade\n");
+        printf("Invaild grade\n");
     
     }    
 
