@@ -1,55 +1,58 @@
 #include <stdio.h>
 
-int main(void) {
+int main(void)
+{
+    FILE *fp;
+
     int a[] = {0, 1, 2};
     char b[] = "ABC";
     float c[] = {1.1f, 1.2f, 1.3f};
 
-    int read_a[3];
-    char read_b[4] = {0};
-    float read_c[3];
+    int ra[3];
+    char rb[3];
+    float rc[3];
 
-    FILE *fp = fopen("a.bin", "wb");
+    /* Open binary file for writing */
+    fp = fopen("a.bin", "wb");
     if (fp == NULL) {
-        perror("無法建立 a.bin");
+        printf("File open error!\n");
         return 1;
     }
 
-    if (fwrite(a, sizeof(a[0]), 3, fp) != 3 ||
-        fwrite(b, sizeof(b[0]), 3, fp) != 3 ||
-        fwrite(c, sizeof(c[0]), 3, fp) != 3) {
-        fprintf(stderr, "寫入 a.bin 失敗\n");
-        fclose(fp);
-        return 1;
-    }
+    fwrite(a, sizeof(int), 3, fp);
+    fwrite(b, sizeof(char), 3, fp);
+    fwrite(c, sizeof(float), 3, fp);
 
     fclose(fp);
 
+    /* Open binary file for reading */
     fp = fopen("a.bin", "rb");
     if (fp == NULL) {
-        perror("無法讀取 a.bin");
+        printf("File open error!\n");
         return 1;
     }
 
-    if (fread(read_a, sizeof(read_a[0]), 3, fp) != 3 ||
-        fread(read_b, sizeof(b[0]), 3, fp) != 3 ||
-        fread(read_c, sizeof(read_c[0]), 3, fp) != 3) {
-        fprintf(stderr, "讀取 a.bin 失敗\n");
-        fclose(fp);
-        return 1;
-    }
+    fread(ra, sizeof(int), 3, fp);
+    fread(rb, sizeof(char), 3, fp);
+    fread(rc, sizeof(float), 3, fp);
 
     fclose(fp);
 
-    for (int i = 0; i < 3; i++) {
-        printf("%d%c", read_a[i], i == 2 ? '\n' : ' ');
-    }
+    /* Print the contents */
+    for (int i = 0; i < 3; i++)
+        printf("%d ", ra[i]);
 
-    printf("%s\n", read_b);
+    printf("\n");
 
-    for (int i = 0; i < 3; i++) {
-        printf("%f%c", read_c[i], i == 2 ? '\n' : ' ');
-    }
+    for (int i = 0; i < 3; i++)
+        printf("%c ", rb[i]);
+
+    printf("\n");
+
+    for (int i = 0; i < 3; i++)
+        printf("%f ", rc[i]);
+
+    printf("\n");
 
     return 0;
 }
